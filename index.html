@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños Elizabeth, Madre de mi Vida! ❤️</title>
+    <link rel="icon" href="./MynauiCakeSolid.png" type="image/png">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,400;1,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0D0D11',
+                        darkCard: '#16161D',
+                        accentPink: '#FF2A85',
+                        pastelPink: '#FFB6C1',
+                        softPink: '#FFE4E1',
+                        brightWhite: '#FFFFFF',
+                    },
+                    fontFamily: {
+                        cinzel: ['"Cinzel"', 'serif'],
+                        playfair: ['"Playfair Display"', 'serif'],
+                        dancing: ['"Dancing Script"', 'cursive'],
+                        sansText: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes envelopeFall {
+            0% {
+                transform: translateY(-900px) rotate(-12deg) scale(0.6);
+                opacity: 0;
+            }
+            70% {
+                transform: translateY(20px) rotate(3deg) scale(1.03);
+                opacity: 1;
+            }
+            85% {
+                transform: translateY(-10px) rotate(-1deg) scale(0.98);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+        }
+
+        @keyframes sealGlow {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(255, 42, 133, 0.6), 0 0 30px rgba(255, 182, 193, 0.3);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 25px rgba(255, 42, 133, 0.9), 0 0 45px rgba(255, 182, 193, 0.6);
+            }
+        }
+
+        @keyframes floatAnimation {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1.5deg); }
+        }
+
+        @keyframes heartFloatUp {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-105vh) scale(1.3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes glowText {
+            0%, 100% {
+                text-shadow: 0 0 12px rgba(255, 42, 133, 0.7), 0 0 25px rgba(255, 182, 193, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 22px rgba(255, 42, 133, 1), 0 0 40px rgba(255, 182, 193, 0.8), 0 0 60px rgba(255, 255, 255, 0.9);
+            }
+        }
+
+        .animate-fall {
+            animation: envelopeFall 1.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .seal-pulse {
+            animation: sealGlow 2s infinite ease-in-out;
+        }
+
+        .float-hover {
+            animation: floatAnimation 4.5s ease-in-out infinite;
+        }
+
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: heartFloatUp linear forwards;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1F1924 0%, #0D0D11 70%, #050507 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #FFFFFF;
+        }
+
+        .envelope-wrapper {
+            background: linear-gradient(135deg, #1A1A22 0%, #251B27 100%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 25px rgba(255, 42, 133, 0.25);
+            border: 1px solid rgba(255, 182, 193, 0.2);
+            border-radius: 16px;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, #2D1A29 0%, #1A121F 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top;
+            transition: transform 0.8s ease-in-out, z-index 0.2s ease-in-out;
+            z-index: 25;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 5;
+        }
+
+        .pink-glow-title {
+            animation: glowText 2.5s infinite ease-in-out;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 42, 133, 0.05);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 42, 133, 0.4);
+            border-radius: 10px;
+        }
+
+        .timer-card {
+            background: rgba(13, 13, 17, 0.8);
+            border: 1px solid rgba(255, 42, 133, 0.3);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="font-sansText select-none min-h-screen flex flex-col justify-between relative">
+
+    <!-- CORAZONES FLOTANTES DE FONDO -->
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- AUDIO DE FONDO -->
+    <audio id="bgm" loop preload="auto">
+        <source src="comopagarte.mpeg" type="audio/mpeg">
+    </audio>
+
+    <!-- BOTÓN REGRESAR (TOP-LEFT) SOLO SVG - APARECE SOLO EN LA ÚLTIMA PANTALLA -->
+    <button id="back-to-letter-btn" onclick="backToLetter()" 
+            class="hidden fixed top-5 left-5 z-50 p-3.5 rounded-full bg-black/60 text-pastelPink border border-accentPink/40 backdrop-blur-md shadow-xl hover:bg-accentPink hover:text-white hover:scale-110 active:scale-95 transition-all duration-300"
+            title="Volver a la carta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+    </button>
+
+    <!-- BOTÓN DE MÚSICA -->
+    <button id="music-toggle" onclick="toggleMusic()" 
+            class="fixed top-5 right-5 z-50 bg-black/60 backdrop-blur-md p-3.5 rounded-full shadow-lg text-pastelPink hover:text-white hover:bg-accentPink hover:scale-110 transition-all duration-300 border border-accentPink/30 flex items-center justify-center w-12 h-12">
+        <i id="music-icon" class="fas fa-music text-lg"></i>
+    </button>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-grow flex items-center justify-center p-4 relative z-10">
+
+        <!-- 1. PANTALLA INTRO: CARTA, SELLO Y CONTADOR ANUAL -->
+        <div id="intro-stage" class="w-full max-w-lg text-center flex flex-col items-center justify-center py-6">
+            <div id="ambient-text" class="transition-opacity duration-1000 mb-6 opacity-100 w-full">
+                <span class="inline-block px-5 py-1.5 rounded-full bg-accentPink/10 text-pastelPink text-xs sm:text-sm font-semibold uppercase tracking-widest border border-accentPink/30 shadow-sm mb-3">
+                    27 DE SEPTIEMBRE DE CADA AÑO
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-playfair italic text-white/90 mb-4">PARA: ELIZABETH <br>DE: SU HIJO</h2>
+
+                <!-- COMPONENTE DEL CONTADOR ANUAL EN MINUTOS -->
+                <div id="countdown-box" class="w-full max-w-md mx-auto p-4 rounded-2xl border border-accentPink/30 bg-black/50 backdrop-blur-md shadow-xl my-2">
+                    <p id="countdown-title" class="text-xs uppercase tracking-widest text-pastelPink font-semibold mb-2">
+                        ⏳ Tiempo restante para el 27 de Septiembre:
+                    </p>
+                    
+                    <!-- REJILLA DE TIEMPO CON ENFOQUE EN MINUTOS -->
+                    <div id="timer-display" class="grid grid-cols-4 gap-2 text-center">
+                        <div class="timer-card p-2 rounded-xl border border-accentPink/20">
+                            <span id="cd-days" class="block text-xl sm:text-2xl font-bold text-white">00</span>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-wider">Días</span>
+                        </div>
+                        <div class="timer-card p-2 rounded-xl border border-accentPink/20">
+                            <span id="cd-hours" class="block text-xl sm:text-2xl font-bold text-white">00</span>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-wider">Horas</span>
+                        </div>
+                        <div class="timer-card p-2 rounded-xl border border-accentPink/40 bg-accentPink/10 shadow-lg">
+                            <span id="cd-minutes" class="block text-xl sm:text-2xl font-black text-pastelPink animate-pulse">00</span>
+                            <span class="text-[10px] text-accentPink uppercase font-bold tracking-wider">Minutos</span>
+                        </div>
+                        <div class="timer-card p-2 rounded-xl border border-accentPink/20">
+                            <span id="cd-seconds" class="block text-xl sm:text-2xl font-bold text-white">00</span>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-wider">Segs</span>
+                        </div>
+                    </div>
+
+                    <div id="total-minutes-label" class="mt-2.5 text-xs text-pastelPink/90 font-medium">
+                        (Equivalente a <span id="cd-total-minutes" class="font-bold text-white">0</span> minutos en total)
+                    </div>
+                </div>
+            </div>
+
+            <!-- SOBRE DE CARTA -->
+            <div id="envelope-container" class="hidden w-full max-w-xs sm:max-w-md aspect-[4/3] perspective-1000 cursor-pointer group mt-2">
+                <div id="envelope" class="envelope-wrapper w-full h-full flex flex-col justify-between items-center p-6 relative float-hover">
+                    
+                    <div class="envelope-flap"></div>
+
+                    <!-- Estampilla decorativa -->
+                    <div class="w-full flex justify-between items-start z-10 opacity-80">
+                        <div class="text-left font-dancing text-pastelPink text-xl leading-tight">
+                            Para: Elizabeth<br>Madre de mi Vida ❤️
+                        </div>
+                        <div class="border border-dashed border-accentPink/50 p-2 rounded-lg bg-black/40 text-center">
+                            <i class="fas fa-cake-candles text-accentPink text-lg"></i>
+                        </div>
+                    </div>
+
+                    <!-- SELLO DE CORAZÓN -->
+                    <div id="seal" onclick="openLetter()" class="z-30 flex flex-col items-center justify-center cursor-pointer my-auto transition-transform duration-300 group-hover:scale-105">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-accentPink via-pink-600 to-pastelPink flex items-center justify-center shadow-2xl seal-pulse border-2 border-white">
+                            <i class="fas fa-heart text-white text-3xl sm:text-4xl drop-shadow-md"></i>
+                        </div>
+                        <span class="mt-4 px-4 py-1.5 bg-black/80 text-pastelPink rounded-full text-xs font-semibold shadow-md border border-accentPink/40 flex items-center gap-2 animate-bounce">
+                            <i class="fas fa-hand-pointer text-xs"></i> ABRE AKI
+                        </span>
+                    </div>
+
+                    <div class="w-full text-center z-10 text-xs text-gray-400 tracking-widest uppercase font-sansText">
+                        ✨ ELIZABETH CAPOTE NIÑO ✨
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. PANTALLA CONTENIDO: FOTO DE ELIZABETH + POEMA -->
+        <div id="letter-stage" class="hidden w-full max-w-2xl transform transition-all duration-1000 scale-95 opacity-0">
+            <div class="bg-darkCard rounded-3xl p-6 sm:p-10 border border-accentPink/30 relative overflow-hidden my-4 shadow-2xl">
+                
+                <!-- Esquinas decorativas rosa -->
+                <div class="absolute top-4 left-4 text-accentPink/40 text-lg"><i class="fas fa-sparkles"></i></div>
+                <div class="absolute top-4 right-4 text-accentPink/40 text-lg"><i class="fas fa-sparkles"></i></div>
+                <div class="absolute bottom-4 left-4 text-accentPink/40 text-lg"><i class="fas fa-sparkles"></i></div>
+
+                 <!-- Imagen adaptable de Mamá Elizabeth -->
+                <div class="absolute bottom-3 right-3 z-30">
+                    <img id="corner-fixed-img" 
+                         src="./happyti.gif" 
+                         alt="Mamá Elizabeth" 
+                         class="block w-16 h-auto object-contain"
+                         onerror="this.onerror=null; this.src='MA.jpeg';" />
+                </div>
+                <div class="absolute bottom-3 left-3 z-30">
+                    <img id="corner-left-img"
+                         src="baila.gif"
+                         alt="Mamá Elizabeth bailando"
+                         class="block w-16 h-auto object-contain"
+                         onerror="this.onerror=null; this.src='MA.jpeg';" />
+                </div>
+
+                <!-- ENCABEZADO -->
+                <div class="text-center mb-6 border-b border-accentPink/20 pb-4">
+                    <span class="text-accentPink font-dancing text-4xl sm:text-5xl block mb-1">Querida Mamá Elizabeth</span>
+                    <p class="text-xs sm:text-sm text-pastelPink font-semibold font-sansText uppercase tracking-widest">
+                        ¡Feliz Cumpleaños Elizabeth, Madre de mi Vida!
+                    </p>
+                </div>
+
+                <!-- MARCO DE LA FOTO DE MAMÁ -->
+                <div class="flex flex-col items-center justify-center mb-6">
+                    <div class="relative group">
+                        <div class="absolute -top-5 left-1/2 -translate-x-1/2 z-20 text-accentPink text-2xl drop-shadow-md">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-full p-1 bg-gradient-to-tr from-accentPink via-pastelPink to-white shadow-xl shadow-accentPink/20">
+                            <!-- FOTO DE LA MADRE: MA.jpeg -->
+                            <img id="mother-photo" 
+                                 src="MA.jpeg" 
+                                 alt="Elizabeth, Madre de mi Vida" 
+                                 class="w-full h-full object-cover rounded-full border-2 border-black shadow-inner transition-transform duration-500 group-hover:scale-105"
+                                 onerror="this.onerror=null; this.src='MA.jpeg';" />
+                        </div>
+                    </div>
+                    <span class="text-xs text-pastelPink font-semibold mt-2.5 tracking-wider font-sansText">❤️ ELIZABETH ❤️</span>
+                </div>
+
+                <!-- POEMA EXACTO DE LA MADRE -->
+                <div class="font-playfair text-white/90 text-base sm:text-lg leading-relaxed text-center space-y-4 max-h-[42vh] overflow-y-auto px-2 custom-scrollbar">
+                    
+                    <div class="p-5 rounded-2xl bg-black/40 border border-accentPink/20 shadow-inner text-gray-200 text-sm sm:text-base leading-relaxed text-left sm:text-center space-y-3">
+                        <p>
+                            Madre quizás ande ausente casi siempre pero no significa que me olvide de mi projenitora, en este día tan bonito que jamás se aya visto yo que tan seco que soy, con usted madre de mi vida que me vio llorar, que me vio reír, que me vio gritar y que literalmente me fastidiaba con toda vaina como la del pantitomojado 😡 pero eso no importaba 😊
+                        </p>
+                        <p>
+                            porque al final usted siempre me demostraba su amor y su cariño así sea que me partiera la escoba en el coco pero lo asía con amor y cariño 🧹❤️
+                        </p>
+                        <p>
+                            espero que este día madre querida este lleno de muchas bendiciones (y mire que no soy de religión) pero por usted hasta le dio oración madre mía, la quiero full al infinito porcentaje.
+                        </p>
+                    </div>
+
+                    <p class="font-dancing text-2xl sm:text-3xl text-accentPink pt-2">
+                        ¡Gracias por ser la mejor Mamá del mundo!
+                    </p>
+                </div>
+
+                <!-- BOTÓN A LA PANTALLA FINAL -->
+                <div class="mt-8 text-center pt-4 border-t border-accentPink/20">
+                    <button onclick="showFinalOutro()" class="px-8 py-3.5 bg-gradient-to-r from-accentPink via-pink-600 to-pastelPink text-white font-bold rounded-full shadow-lg shadow-accentPink/30 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-3 mx-auto group">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30"><path fill="#ffffff" d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m.2-9l-.9.9q-.275.275-.275.7t.275.7t.7.275t.7-.275l2.6-2.6q.3-.3.3-.7t-.3-.7l-2.6-2.6q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7l.9.9H9q-.425 0-.712.288T8 12t.288.713T9 13z"/></svg>
+                        </span>
+                        <i class="fas fa-heart text-white group-hover:scale-125 transition-transform"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 3. PANTALLA OUTRO: CELEBRACIÓN CON FUENTE ELEGANTE Y CONFETI AUTOMÁTICO -->
+        <div id="outro-stage" class="hidden w-full max-w-4xl text-center transform transition-all duration-1000 scale-90 opacity-0 my-auto py-6">
+            <div class="bg-darkCard/90 backdrop-blur-xl rounded-3xl p-8 sm:p-14 shadow-2xl border-2 border-accentPink/40 relative overflow-hidden">
+                <img src="baila.gif" alt="Mamá Elizabeth bailando" class="absolute bottom-3 left-3 z-10 w-12 h-12 sm:w-16 sm:h-16 object-contain">
+                
+                <div class="text-accentPink text-2xl sm:text-3xl mb-4 animate-pulse">
+                    <i class="fas fa-star mx-1"></i>
+                    <i class="fas fa-crown mx-3 text-4xl sm:text-5xl text-pastelPink"></i>
+                    <i class="fas fa-star mx-1"></i>
+                </div>
+
+                <!-- TÍTULO PRINCIPAL CON FUENTE CINZEL + GLOW ROSA NEÓN -->
+                <h1 class="font-cinzel font-black text-3xl sm:text-5xl lg:text-6xl text-white pink-glow-title leading-tight tracking-wider uppercase py-2">
+                    ¡FELIZ CUMPLEAÑOS ELIZABETH,<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-pastelPink via-accentPink to-white">
+                        MADRE DE MI VIDA!
+                    </span>
+                </h1>
+
+                <p class="text-xl sm:text-3xl font-dancing text-pastelPink mt-6 mb-4">
+                    ✨❤️ Te amo al infinito porcentaje ❤️✨
+                </p>
+
+                <p class="text-sm sm:text-base font-sansText text-gray-300 max-w-xl mx-auto font-light tracking-wide">
+                    Que este día tan bonito esté lleno de sonrisas, paz y todas las bendiciones del universo.
+                </p>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center py-4 text-xs text-gray-500 font-sansText z-10">
+        MADRE ❤️
+    </footer>
+
+    <script>
+        let isMusicPlaying = false;
+        let confettiInterval = null;
+        let countdownTimerId = null;
+        const bgm = document.getElementById('bgm');
+        const musicIcon = document.getElementById('music-icon');
+
+        window.addEventListener('load', () => {
+            createBackgroundHearts();
+            startAnnualCountdown();
+
+            // Animación inicial de la carta cayendo
+            setTimeout(() => {
+                const envContainer = document.getElementById('envelope-container');
+                envContainer.classList.remove('hidden');
+                envContainer.classList.add('animate-fall');
+            }, 600);
+        });
+
+        // LÓGICA DEL CONTADOR ANUAL EN MINUTOS PARA EL 27 DE SEPTIEMBRE
+        function startAnnualCountdown() {
+            function updateTimer() {
+                const now = new Date();
+                let currentYear = now.getFullYear();
+                
+                // Fecha objetivo: 27 de Septiembre a las 00:00:00
+                let targetDate = new Date(currentYear, 8, 27, 0, 0, 0); // Mes 8 es Septiembre (0-indexed)
+
+                // Si ya pasó el 27 de Septiembre de este año (y terminó el día), apuntar al próximo año
+                const endOfBirthday = new Date(currentYear, 8, 27, 23, 59, 59);
+                if (now > endOfBirthday) {
+                    targetDate = new Date(currentYear + 1, 8, 27, 0, 0, 0);
+                }
+
+                const timeDiff = targetDate - now;
+
+                // Si hoy es 27 de Septiembre
+                if (now.getMonth() === 8 && now.getDate() === 27) {
+                    document.getElementById('countdown-title').innerHTML = "🎉 ¡HOY ES EL GRAN DÍA! 🎉";
+                    document.getElementById('timer-display').innerHTML = `
+                        <div class="col-span-4 p-3 rounded-xl bg-accentPink/20 border border-accentPink text-pastelPink font-bold text-lg animate-pulse">
+                            🎂 ¡FELIZ CUMPLEAÑOS ELIZABETH! 🎂
+                        </div>
+                    `;
+                    document.getElementById('total-minutes-label').style.display = 'none';
+                    return;
+                }
+
+                // Cálculo de tiempo
+                const seconds = Math.floor((timeDiff / 1000) % 60);
+                const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
+                const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const totalMinutes = Math.floor(timeDiff / (1000 * 60));
+
+                // Formatear ceros a la izquierda
+                document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+                document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+                document.getElementById('cd-total-minutes').textContent = totalMinutes.toLocaleString('es-ES');
+            }
+
+            updateTimer();
+            countdownTimerId = setInterval(updateTimer, 1000);
+        }
+
+        // Generador de corazones flotantes
+        function createBackgroundHearts() {
+            const container = document.getElementById('hearts-container');
+            
+            setInterval(() => {
+                if (document.hidden) return;
+                
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart', 'text-accentPink/30');
+                
+                const randomX = Math.random() * 100;
+                const randomSize = Math.random() * 16 + 10;
+                const randomDuration = Math.random() * 6 + 6;
+
+                heart.style.left = `${randomX}vw`;
+                heart.style.bottom = `-20px`;
+                heart.style.fontSize = `${randomSize}px`;
+                heart.style.animationDuration = `${randomDuration}s`;
+
+                heart.innerHTML = `<i class="fas fa-heart"></i>`;
+                container.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, randomDuration * 1000);
+            }, 650);
+        }
+
+        // Control de música
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgm.pause();
+                musicIcon.classList.remove('fa-volume-high');
+                musicIcon.classList.add('fa-music');
+                isMusicPlaying = false;
+            } else {
+                bgm.play().then(() => {
+                    musicIcon.classList.remove('fa-music');
+                    musicIcon.classList.add('fa-volume-high');
+                    isMusicPlaying = true;
+                }).catch(err => {
+                    console.log("Autoplay bloqueado por el navegador", err);
+                });
+            }
+        }
+
+        // Abrir la carta
+        function openLetter() {
+            if (!isMusicPlaying) {
+                toggleMusic();
+            }
+
+            const envelope = document.getElementById('envelope');
+            const introStage = document.getElementById('intro-stage');
+            const letterStage = document.getElementById('letter-stage');
+
+            envelope.classList.add('open');
+
+            // Pequeña ráfaga inicial
+            confetti({
+                particleCount: 45,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#FF2A85', '#FFB6C1', '#FFFFFF', '#1A1A22']
+            });
+
+            setTimeout(() => {
+                introStage.style.transition = 'all 0.8s ease-out';
+                introStage.style.opacity = '0';
+                introStage.style.transform = 'translateY(-30px)';
+
+                setTimeout(() => {
+                    introStage.classList.add('hidden');
+                    letterStage.classList.remove('hidden');
+
+                    setTimeout(() => {
+                        letterStage.classList.remove('scale-95', 'opacity-0');
+                        letterStage.classList.add('scale-100', 'opacity-100');
+                    }, 50);
+
+                }, 800);
+            }, 600);
+        }
+
+        // Ir a la pantalla Outro / Sorpresa Final
+        function showFinalOutro() {
+            const letterStage = document.getElementById('letter-stage');
+            const outroStage = document.getElementById('outro-stage');
+            const backBtn = document.getElementById('back-to-letter-btn');
+
+            letterStage.classList.remove('scale-100', 'opacity-100');
+            letterStage.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                letterStage.classList.add('hidden');
+                outroStage.classList.remove('hidden');
+                backBtn.classList.remove('hidden');
+
+                setTimeout(() => {
+                    outroStage.classList.remove('scale-90', 'opacity-0');
+                    outroStage.classList.add('scale-100', 'opacity-100');
+                    
+                    // Iniciar lluvia constante e ininterrumpida de confeti rosa/blanco/negro
+                    startAutoConfetti();
+                }, 50);
+            }, 800);
+        }
+
+        // Confeti automático continuo para la pantalla final
+        function startAutoConfetti() {
+            if (confettiInterval) clearInterval(confettiInterval);
+
+            // Disparo inicial grande
+            confetti({
+                particleCount: 100,
+                spread: 100,
+                origin: { y: 0.5 },
+                colors: ['#FF2A85', '#FFB6C1', '#FFFFFF', '#0D0D11']
+            });
+
+            // Lluvia constante
+            confettiInterval = setInterval(() => {
+                if (document.hidden) return;
+                
+                confetti({
+                    particleCount: 12,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#FF2A85', '#FFB6C1', '#FFFFFF']
+                });
+                confetti({
+                    particleCount: 12,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#FF2A85', '#FFB6C1', '#FFFFFF']
+                });
+            }, 900);
+        }
+
+        function stopAutoConfetti() {
+            if (confettiInterval) {
+                clearInterval(confettiInterval);
+                confettiInterval = null;
+            }
+        }
+
+        // Regresar a la carta (vía SVG Top-Left)
+        function backToLetter() {
+            stopAutoConfetti();
+
+            const outroStage = document.getElementById('outro-stage');
+            const letterStage = document.getElementById('letter-stage');
+            const backBtn = document.getElementById('back-to-letter-btn');
+
+            outroStage.classList.remove('scale-100', 'opacity-100');
+            outroStage.classList.add('scale-90', 'opacity-0');
+            backBtn.classList.add('hidden');
+
+            setTimeout(() => {
+                outroStage.classList.add('hidden');
+                letterStage.classList.remove('hidden');
+
+                setTimeout(() => {
+                    letterStage.classList.remove('scale-95', 'opacity-0');
+                    letterStage.classList.add('scale-100', 'opacity-100');
+                }, 50);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
